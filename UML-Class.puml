@@ -1,0 +1,70 @@
+@startuml
+class User {
+  +id: int
+  +username: str
+  +nome: str
+  +email: str
+  +password: str
+  +telefone: str
+  +cpf: str
+  +tipo: TipoUsuario
+}
+
+class Servico {
+  +id: int
+  +prestador: User
+  +nome: str
+  +requer_anamnese: bool
+  +url_anamnese: str
+}
+
+class Agendamento {
+  +id: int
+  +cliente: User
+  +servico: Servico
+  +data_hora: datetime
+  +status: StatusAgendamento
+  +apto_para_servico: bool
+}
+
+class Notificacao {
+  +id: int
+  +agendamento: Agendamento
+  +destinatario: User
+  +tipo: TipoNotificacao
+  +mensagem: str
+  +data_envio: datetime
+}
+
+enum TipoUsuario {
+  PRESTADOR
+  CLIENTE
+}
+
+enum StatusAgendamento {
+  AGUARDANDO_ANAMNESE
+  AGUARDANDO_CONFIRMACAO
+  CONFIRMADO
+  CANCELADO
+  REMARCADO
+}
+
+enum TipoNotificacao {
+  SOLICITACAO_ANAMNESE
+  CONFIRMACAO_PENDENTE
+  AGENDAMENTO_CONFIRMADO
+  CANCELAMENTO
+  REMARCACAO
+}
+
+' Relações entre classes
+User "1" *-- "0..*" Servico : presta
+Servico "1" -- "0..*" Agendamento : possui
+User "1" -- "0..*" Agendamento : agenda
+Agendamento "1" -- "0..*" Notificacao : gera
+
+' Relações de estado (simplificadas)
+Agendamento --> StatusAgendamento
+Notificacao --> TipoNotificacao
+User --> TipoUsuario
+@enduml
