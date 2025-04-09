@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #APPs instalados
     'usuarios',
+    'servico',
     #bibliotecas instaladas
 ]
 
@@ -57,7 +58,7 @@ ROOT_URLCONF = 'FlowAgenda.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

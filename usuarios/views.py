@@ -5,11 +5,12 @@ from django.contrib.auth.models import Group
 
 from django.shortcuts import render, get_object_or_404, redirect
 
-from principal.decorators import group_required
+#from principal.decorators import group_required
 from .models import *
 from .forms import *
 
 
+# Criação de novo usuarios, tanto para cliente quanto para alocador
 def addUser(request):
     if request.method == "POST":
         form = UsuarioFormSing(request.POST, request.FILES)
@@ -29,6 +30,8 @@ def addUser(request):
         form = UsuarioFormSing()
         return render(request, "user/add.html", {"form" : form, 'titulo': "Criar Usuario"})
     
+    
+# Metado de edição dos usuarios
 @login_required
 def editUser(request, id):
     if not request.user.is_superuser and  id != request.user.id:
@@ -50,12 +53,15 @@ def editUser(request, id):
     context = {'form' : form, 'titulo': 'Editar Usuario'}
     return render(request, 'edit.html', context)
 
+# Metado de deleta no banco de dados
 @login_required
 def deleteUser(request, id):
     usuario = Usuario.objects.filter(id = id).first()
     if usuario: usuario.delete()
     return redirect('listUser')
 
+
+# Metado para lista os usuario
 @login_required
 def profile(request, id=None):
     if not request.user.is_superuser and id  is not None and id != request.user.id:
@@ -71,7 +77,7 @@ def profile(request, id=None):
 
     return render(request, 'user/profile.html', {'form': form, 'user':user, 'titulo': 'Perfil do Usuario'})
 
-
+#metado para muda o tipo de conta de cliente/alocador
 @login_required
 def muda_tipo(request, id):
     if request.method =='POST':
@@ -97,6 +103,7 @@ def muda_tipo(request, id):
         
     return redirect('profileUser', id=id)
 
+# Metado para lista todos os usuarios
 @login_required
 def listUser(request):
     usuarios = Usuario.objects,all()
