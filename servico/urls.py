@@ -7,4 +7,5 @@ urlpatterns = [
     path('addServico/', views.addServico, name="addServico"),
     path('editServico/<int:id>/', views.editServico, name="editServico"),
     path('deleteServico/<int:id>/', views.deleteServico, name="deleteServico"),
+    
 ]

@@ -3,41 +3,43 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 
-
 from .models import *
-from .forms import *
-
+from .forms import ServicoForm, PerguntaForm, AnamneseForm, OpcaoPerguntaForm, MultiploOpcaoPerguntaForm  # Adicionei os novos forms
 
 def addServico(request):
     if request.method == "POST":
         form = ServicoForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect("/servico/")
+            servico = form.save()  # Alterei para capturar o objeto salvo
+            # Adicionei criação automática de anamnese se for obrigatória
+            if servico.anamnese_obrigatoria:
+                Anamnese.objects.get_or_create(servico=servico)
+            return redirect("/servico/") 
         else:
             return render(request, "addServico.html", {"form" : form, 'titulo' : "Criar serviço"})
     else:
         form = ServicoForm()
         return render(request, "addServico.html", {"form": form, 'titulo': "Criar serviço"})
 
-
 def editServico(request, id):
     servico = Servico.objects.get(id=id)
-    print(servico)
     
     if request.method == "POST":
         form = ServicoForm(request.POST, instance=servico)
         if form.is_valid():
-            form.save()
+            servico = form.save()
+            # Adicionei sincronização da anamnese quando o campo obrigatório é alterado
+            if servico.anamnese_obrigatoria:
+                Anamnese.objects.get_or_create(servico=servico)
+            else:
+                Anamnese.objects.filter(servico=servico).delete()
             return redirect('/servico/')
-    
     else:       
         form = ServicoForm(instance=servico)
     return render(request, 'editServico.html', {'form': form, 'titulo': 'Editar serviço'})
 
-
 def deleteServico(request, id):
-    servico = Servico.objectss.filter(id=id).first()
+    servico = Servico.objects.filter(id=id).first()
     
     if not servico:
         messages.error(request, 'serviço não encontrado')
@@ -52,11 +54,11 @@ def listServico(request, id=None):
             return redirect('listServico', request.user.id)
             
         user = get_object_or_404(User, id=id)
-        servico = Servico.objectss.filter(cliente=user)
+        servico = Servico.objects.filter(cliente=user)
     
     elif request.user.is_superuser:
-        servico = Servico.objectss.all()
+        servico = Servico.objects.all()
         
     else:
-        redirect('listServico', request.user.id)
+        return redirect('listServico', kwargs={'id': request.user.id})
     return render(request, 'servico/listServico.html', {'servico': servico})

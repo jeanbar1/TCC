@@ -1,16 +1,15 @@
+# servico/forms.py
 from django import forms
-from django.forms import ModelForm
-from .models import Servico
+from .models import Servico, Anamnese, Pergunta, OpcaoPergunta
 
-
-class ServicoForm(ModelForm):
+class ServicoForm(forms.ModelForm):
     class Meta:
         model = Servico
-        fields = ['nome', 'endereco', 'anaminese', 'descricao', 'telefone']
+        fields = ['nome', 'endereco', 'anamnese_obrigatoria', 'descricao', 'telefone', 'duracao_minutos']
         widgets = {
-            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'digite o nome do servico aqui'}),
-            'endereco': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'digite o endereco do servico aqui'}),
-            'anaminese': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'descricao': forms.Textarea(attrs={'class': 'form-check-text'}),
-            'telefone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'digite o telefone do servico aqui'}),
+            'nome': forms.TextInput(attrs={'class': 'form-control'}),
+            'endereco': forms.TextInput(attrs={'class': 'form-control'}),
+            'descricao': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'telefone': forms.TextInput(attrs={'class': 'form-control'}),
+            'duracao_minutos': forms.NumberInput(attrs={'class': 'form-control'}),
         }
