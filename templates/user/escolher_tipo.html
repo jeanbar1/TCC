@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Escolha seu Tipo de Cadastro{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Como você quer se cadastrar?</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mt-4">
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-person-check-fill text-primary" style="font-size: 3rem;"></i>
+                                    <h4 class="my-3">Sou Cliente</h4>
+                                    <p>Quero contratar serviços profissionais</p>
+                                    <a href="{% url 'addUser' %}?tipo=cliente" class="btn btn-primary mt-3">
+                                        Cadastrar como Cliente
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-briefcase-fill text-success" style="font-size: 3rem;"></i>
+                                    <h4 class="my-3">Sou Autônomo</h4>
+                                    <p>Quero oferecer meus serviços</p>
+                                    <a href="{% url 'addUser' %}?tipo=autonomo" class="btn btn-success mt-3">
+                                        Cadastrar como Autônomo
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <p>Já tem uma conta? <a href="{% url 'login' %}">Faça login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

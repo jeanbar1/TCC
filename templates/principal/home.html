@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}FlowAgenda - Página Inicial{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+
+            <!-- Cabeçalho -->
+            <div class="mb-5">
+                <h1 class="display-4">Bem-vindo ao <span class="text-primary">FlowAgenda</span></h1>
+                <p class="lead">Sua solução completa para agendamento e gestão de serviços</p>
+            </div>
+
+            <!-- Conteúdo baseado no status de autenticação -->
+            {% if user.is_authenticated %}
+                <!-- Painel para usuários logados -->
+                <div class="card border-primary mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h4>Olá, {{ user.nome }}!</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-3">
+                            {% if user.is_autonomo %}
+                                <a href="{% url 'dashboard_autonomo' %}" class="btn btn-lg btn-outline-primary">
+                                    <i class="bi bi-speedometer2"></i> Painel do Autônomo
+                                </a>
+                                <a href="{% url 'meus_servicos' %}" class="btn btn-lg btn-outline-success">
+                                    <i class="bi bi-tools"></i> Meus Serviços
+                                </a>
+                            {% else %}
+                                <a href="{% url 'servicos_disponiveis' %}" class="btn btn-lg btn-outline-info">
+                                    <i class="bi bi-search"></i> Explorar Serviços
+                                </a>
+                                <a href="{% url 'meus_agendamentos' %}" class="btn btn-lg btn-outline-warning">
+                                    <i class="bi bi-calendar-check"></i> Meus Agendamentos
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <!-- Chamada para ação para visitantes -->
+                <div class="card border-primary mb-4">
+                    <div class="card-body py-5">
+                        <h3 class="mb-4">Comece agora mesmo!</h3>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-4">
+                                <i class="bi bi-box-arrow-in-right"></i> Entrar
+                            </a>
+                            <a href="{% url 'addUser' %}" class="btn btn-success btn-lg px-4">
+                                <i class="bi bi-person-plus"></i> Cadastrar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Recursos do sistema -->
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="bi bi-calendar-event text-primary fs-1"></i>
+                            <h4 class="my-3">Agendamento Fácil</h4>
+                            <p>Agende serviços com profissionais qualificados em poucos cliques.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="bi bi-people text-primary fs-1"></i>
+                            <h4 class="my-3">Profissionais</h4>
+                            <p>Encontre os melhores profissionais para suas necessidades.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="bi bi-graph-up text-primary fs-1"></i>
+                            <h4 class="my-3">Gestão Simplificada</h4>
+                            <p>Controle seus agendamentos e serviços de forma eficiente.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Scripts específicos da home -->
+<script>
+    $(document).ready(function(){
+        // Efeito de hover nos cards
+        $('.card').hover(
+            function() {
+                $(this).addClass('shadow');
+            },
+            function() {
+                $(this).removeClass('shadow');
+            }
+        );
+    });
+</script>
+{% endblock %}
